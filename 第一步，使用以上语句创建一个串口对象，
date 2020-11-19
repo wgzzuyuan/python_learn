@@ -1,0 +1,14 @@
+Pyserial
+需要导入这个模块实现上位机和板子通信。
+
+属性的使用方法：
+第一步，使用以上语句创建一个串口对象，
+第二步：直接打开，进行读写就可以了，
+ser=serial.Serial("/dev/ttyAMA0",9600,timeout=0.5)
+ser.open ()  #打开端口
+s = ser.read(10)#从端口读10个字节
+ser.write("hello") #向端口些数据
+
+
+
+
