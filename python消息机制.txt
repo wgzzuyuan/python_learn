@@ -1,0 +1,203 @@
+https://www.cnblogs.com/wongbingming/p/9035579.html
+
+
+
+我的问题：
+python的线城是怎么创建的？？？
+
+
+
+python的消息是怎么发送和接收的？？？
+
+
+
+python中的消息是怎么和队列发生关联的？？？
+
+
+
+
+
+
+
+python中的类你怎么理解？？？提炼出了什么？？？
+对类的操作有：
+
+1、定义属性 ； 2、调用方法
+
+对类的反馈有：
+
+1、得到属性 ； 2、执行方法
+
+在 class 类的函数中，为什么 self是必要的，因为 self 是对象的载体
+
+什么是属性？？？你怎么理解属性？？？
+
+
+
+线程中通信方法大致有如下三种：
+
+threading.Event
+threading.Condition
+queue.Queue
+
+
+从一个线程向另一个线程发送数据最安全的方式可能就是使用 queue 库中的队列了。创建一个被多个线程共享的 Queue 对象，这些线程通过使用put() 和 get() 操作来向队列中添加或者删除元素。
+
+
+
+
+
+
+
+
+
+
+
+python中线程的通信方法有哪些？？？
+事件的操作方法：
+event = threading.Event()
+
+# 重置event，使得所有该event事件都处于待命状态
+event.clear()
+
+# 等待接收event的指令，决定是否阻塞程序执行
+event.wait()
+
+# 发送event指令，使所有设置该event事件的线程执行
+event.set()
+
+
+
+训练例子：
+import time
+import threading  #一定要导入这个模块
+
+
+class MyThread(threading.Thread):#
+    def __init__(self, name, event):#初始化了你的self对象的元素
+        super().__init__()
+        self.name = name
+        self.event = event
+
+    def run(self):#运行方法，在这个方法中等待事件的到来，来了事件做事情对应的事情
+        print('Thread: {} start at {}'.format(self.name, time.ctime(time.time())))
+        # 等待event.set()后，才能往下执行
+        self.event.wait()
+        print('Thread: {} finish at {}'.format(self.name, time.ctime(time.time())))
+
+
+threads = []#定义了一个线程
+event = threading.Event()
+
+# 定义五个线程
+[threads.append(MyThread(str(i), event)) for i in range(1,5)]
+
+# 重置event，使得event.wait()起到阻塞作用
+event.clear()#使得所有的事件休眠
+
+# 启动所有线程
+[t.start() for t in threads]#就是rtos中的启动线程
+
+print('等待5s...')
+time.sleep(5)#延时5秒
+
+print('唤醒所有线程...')
+event.set()#这个就是调度，当你收到消息，或者使事件的时候，用的就是这个函数，这个和rtos是相同的
+
+
+在windows下运行的结果：
+C:\Users\gaoze.wang\itest>python ping.py
+Thread: 1 start at Fri Nov 20 12:24:29 2020
+Thread: 2 start at Fri Nov 20 12:24:29 2020
+Thread: 3 start at Fri Nov 20 12:24:29 2020
+Thread: 4 start at Fri Nov 20 12:24:29 2020
+等待5s...
+唤醒所有线程...
+Thread: 3 finish at Fri Nov 20 12:24:34 2020
+Thread: 4 finish at Fri Nov 20 12:24:34 2020
+Thread: 2 finish at Fri Nov 20 12:24:34 2020
+Thread: 1 finish at Fri Nov 20 12:24:34 2020
+
+
+
+python中的线程的通信方法二：condition   condition就相当于rtos中的互斥锁。
+cond = threading.Condition()
+
+# 类似lock.acquire()
+cond.acquire()
+
+# 类似lock.release()
+cond.release()
+
+# 等待指定触发，同时会释放对锁的获取,直到被notify才重新占有琐。
+cond.wait()
+
+# 发送指定，触发执行
+cond.notify()
+
+
+
+
+
+运行结果：
+C:\Users\gaoze.wang\itest>python ping.py
+hider: 我已经把眼睛蒙上了
+seeker: 我已经藏好了，你快来找我吧
+hider: 我找到你了哦 ~_~
+hider: 我赢了
+seeker: 被你找到了，哎~~~
+
+
+线程通信方法三：队列
+
+from queue import Queue
+from threading import Thread
+import time
+
+class Student(Thread):
+    def __init__(self, name, queue):
+        super().__init__()
+        self.name = name
+        self.queue = queue
+
+    def run(self):
+        while True:
+            # 阻塞程序，时刻监听老师，接收消息
+            msg = self.queue.get()
+            # 一旦发现点到自己名字，就赶紧答到
+            if msg == self.name:
+                print("{}：到！".format(self.name))
+
+
+class Teacher:
+    def __init__(self, queue):
+        self.queue=queue
+
+    def call(self, student_name):
+        print("老师：{}来了没？".format(student_name))
+        # 发送消息，要点谁的名
+        self.queue.put(student_name)
+
+
+queue = Queue()
+teacher = Teacher(queue=queue)
+s1 = Student(name="小明", queue=queue)
+s2 = Student(name="小亮", queue=queue)
+s1.start()
+s2.start()
+
+print('开始点名~')
+teacher.call('小明')
+time.sleep(1)
+teacher.call('小亮')
+
+
+运行结果：
+C:\Users\gaoze.wang\itest>python ping.py
+开始点名~
+老师：小明来了没？
+小明：到！
+老师：小亮来了没？
+小亮：到！
+
+
