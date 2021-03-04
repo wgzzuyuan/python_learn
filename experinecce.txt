@@ -1,0 +1,13 @@
+1,NW模块AT和FRAMEWORK的bug解决：
+
+2，业务：解决上电，AT命令操作过程中触发的bug
+通用命令：ATI (得到版本信息) CPOF 关机   ICF(定义波特率)   CIMI (移动电话全球识别号)
+COPS,CREG,CEREG,CGREG,LOCKBCCH,COPN,CPOL(优先运营商列表) CFUN
+
+CGDCONT CGATT CGACT CGAUTO 
+CPIN(给SIM卡上锁)
+FORCEDNLD(强迫下载)  TRB(重启)  
+
+3，需要添加软件逻辑
+
+
