@@ -1,0 +1,88 @@
+1，Facility 设备
+
+
+ATD10086      要加这个模块
+
+ dump  转储
+
+Portable 可移植的
+
+Implementation 实现
+
+compatibility 兼容性
+
+circuit   电路
+
+negative   负
+
+enhancements   增强
+
+respectively   分别
+
+receipt   收据
+
+initiated   发起
+
+Subsequently 随后
+
+announces  宣布
+
+issuing   发行
+
+intermediate  中间
+
+procedure   过程
+
+shall 应
+
+subclause  章节
+
+Subsequently 随后
+
+simultaneously  同时
+
+issued 发布
+
+registry   注册表
+
+
+portable 可移植的
+
+correspond 对应
+
+
+duplicate 重复的
+
+
+Battery Charging 电池充电
+
+Discharging And Charge Control 放电和充电控制
+
+compatibility 兼容性
+
+link 链接
+
+calibration 校准
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
